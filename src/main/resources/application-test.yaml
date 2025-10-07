@@ -1,0 +1,22 @@
+testing.value: test profile loaded
+logging:
+  level:
+    root: DEBUG
+    org.springframework.web: DEBUG
+    com.example: TRACE
+  file:
+    name: logs/myapp.log
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/testdb
+    username: root
+    password: welcome123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
+
+

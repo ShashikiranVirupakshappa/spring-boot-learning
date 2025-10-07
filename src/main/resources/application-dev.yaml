@@ -1,0 +1,2 @@
+spring.application.name: spring-boot-learning
+testing.value: dev profile loaded
