@@ -3,6 +3,7 @@ package com.javabro.spring_boot_learning.controller;
 import com.javabro.spring_boot_learning.service.SampleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -21,13 +22,15 @@ public class SampleController {
 
     ApplicationContext applicationContext;
 
-
     SampleService sampleService;
 
-    public SampleController(SampleService sampleService) {
+    RabbitTemplate rabbitTemplate;
+
+    public SampleController(ApplicationContext applicationContext, SampleService sampleService, RabbitTemplate rabbitTemplate) {
         logger.debug("samplecontroller logger debug working");
         this.applicationContext = applicationContext;
         this.sampleService = sampleService;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     @GetMapping(name = "getMethod", path="get")
@@ -41,9 +44,12 @@ public class SampleController {
     public String getPassedName(@PathVariable("firstName") String fName, @PathVariable("lastName") String lName) {
         boolean flag = false;
         System.out.println(applicationContext);
-        flag = true;
+        //flag = true;
         if(flag)
             throw new RuntimeException("error occurred");
+
+        rabbitTemplate.convertAndSend("testExchange", "sq", fName+" "+lName);
+
         return fName + " " + lName;
     }
 }
