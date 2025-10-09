@@ -1,5 +1,6 @@
 package com.javabro.spring_boot_learning.rabbitlisteners;
 
+import com.javabro.spring_boot_learning.model.Employee;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
@@ -7,13 +8,12 @@ import org.springframework.stereotype.Component;
 public class MyRabbitListener {
 
     @RabbitListener(queues = "sampleQueue")
-    public void consume(Object object) {
-        if(object instanceof String) {
-            String messageReceived = (String)object;
-             System.out.println("message posted to the sampleQueue is ===========> "+messageReceived);
-        }else {
-            System.out.println("object is not of type string");
-        }
+    public void consume(String message) {
+        System.out.println("message posted to the sampleQueue is ===========> "+message);
+    }
 
+    @RabbitListener(queues = "employeeQueue")
+    public void consume(Employee employee) {
+        System.out.println("message posted to the employeeQueue is ===========> "+employee.getFirstName());
     }
 }
