@@ -1,14 +1,13 @@
 package com.javabro.spring_boot_learning.controller;
-
 import com.javabro.spring_boot_learning.model.Employee;
 import com.javabro.spring_boot_learning.service.SampleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Profile;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,17 +18,20 @@ public class SampleController {
     @Value("${testing.value}")
     private String injectedValue;
 
-    ApplicationContext applicationContext;
+    private ApplicationContext applicationContext;
 
-    SampleService sampleService;
+    private SampleService sampleService;
 
     RabbitTemplate rabbitTemplate;
 
-    public SampleController(ApplicationContext applicationContext, SampleService sampleService, RabbitTemplate rabbitTemplate) {
+    KafkaTemplate kafkaTemplate;
+
+    public SampleController(ApplicationContext applicationContext, SampleService sampleService, RabbitTemplate rabbitTemplate, KafkaTemplate kafkaTemplate) {
         logger.debug("samplecontroller logger debug working");
         this.applicationContext = applicationContext;
         this.sampleService = sampleService;
         this.rabbitTemplate = rabbitTemplate;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     @GetMapping(name = "getMethod", path="get")
@@ -57,6 +59,7 @@ public class SampleController {
         logger.debug("postComplexTypeToRabbitQueue called");
         logger.debug(employee.getFirstName());
         rabbitTemplate.convertAndSend("testExchange", "eq", employee);
+        kafkaTemplate.send("employee-topic", employee);
         return "posted employee data to queue";
 
     }
