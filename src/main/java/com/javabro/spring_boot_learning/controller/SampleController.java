@@ -1,9 +1,11 @@
 package com.javabro.spring_boot_learning.controller;
 import com.javabro.spring_boot_learning.model.Employee;
 import com.javabro.spring_boot_learning.service.SampleService;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Profile;
@@ -22,9 +24,12 @@ public class SampleController {
 
     private SampleService sampleService;
 
-    RabbitTemplate rabbitTemplate;
+    private RabbitTemplate rabbitTemplate;
 
-    KafkaTemplate kafkaTemplate;
+    private KafkaTemplate kafkaTemplate;
+
+    @Autowired
+    private NewTopic newTopic;
 
     public SampleController(ApplicationContext applicationContext, SampleService sampleService, RabbitTemplate rabbitTemplate, KafkaTemplate kafkaTemplate) {
         logger.debug("samplecontroller logger debug working");
@@ -60,6 +65,7 @@ public class SampleController {
         logger.debug(employee.getFirstName());
         rabbitTemplate.convertAndSend("testExchange", "eq", employee);
         kafkaTemplate.send("employee-topic", employee);
+        kafkaTemplate.send(newTopic.name(), employee);
         return "posted employee data to queue";
 
     }

@@ -1,8 +1,14 @@
 package com.javabro.spring_boot_learning.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

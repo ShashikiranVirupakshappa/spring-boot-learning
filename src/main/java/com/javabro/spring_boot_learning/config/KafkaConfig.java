@@ -1,5 +1,6 @@
 package com.javabro.spring_boot_learning.config;
 
+import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -34,6 +35,11 @@ public class KafkaConfig {
     @DependsOn("producerFactory")
     public KafkaTemplate<String, Object> getKafkaTemplate(ProducerFactory<String, Object> producerFactory) {
         return new KafkaTemplate<>(producerFactory);
+    }
+
+    @Bean
+    public NewTopic createTopic() {
+        return new NewTopic("test-topic", 5,(short)1);
     }
 
     /*@Bean
