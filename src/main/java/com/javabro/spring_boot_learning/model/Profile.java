@@ -14,8 +14,7 @@ public class Profile {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String profileName;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id", referencedColumnName = "id")
     private User user;
-
 }

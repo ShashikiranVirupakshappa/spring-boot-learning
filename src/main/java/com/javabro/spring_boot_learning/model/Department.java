@@ -18,6 +18,6 @@ public class Department {
     private String departmentName;
     private String departmentCode;
     private String departmentDesc;
-    @OneToMany(mappedBy = "department")
+    @OneToMany(mappedBy = "department",fetch = FetchType.LAZY)
     private Set<Employee> employees;
 }

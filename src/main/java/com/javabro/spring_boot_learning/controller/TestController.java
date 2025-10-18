@@ -1,5 +1,9 @@
 package com.javabro.spring_boot_learning.controller;
 
+import com.javabro.spring_boot_learning.dto.DepartmentDTO;
+import com.javabro.spring_boot_learning.dto.EmployeeDTO;
+import com.javabro.spring_boot_learning.dto.ProfileDTO;
+import com.javabro.spring_boot_learning.dto.UserDTO;
 import com.javabro.spring_boot_learning.model.Department;
 import com.javabro.spring_boot_learning.model.Employee;
 import com.javabro.spring_boot_learning.model.Profile;
@@ -8,12 +12,14 @@ import com.javabro.spring_boot_learning.repository.DepartmentRepository;
 import com.javabro.spring_boot_learning.repository.EmployeeRepository;
 import com.javabro.spring_boot_learning.repository.ProfileRepository;
 import com.javabro.spring_boot_learning.repository.UserRepository;
+import com.javabro.spring_boot_learning.service.DepartmentService;
+import com.javabro.spring_boot_learning.service.EmployeeService;
+import com.javabro.spring_boot_learning.service.ProfileService;
+import com.javabro.spring_boot_learning.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class TestController {
@@ -21,34 +27,39 @@ public class TestController {
     Logger logger = LoggerFactory.getLogger(TestController.class);
 
     @Autowired
-    UserRepository userRepository;
+    ProfileService profileService;
 
     @Autowired
-    ProfileRepository profileRepository;
+    DepartmentService departmentService;
 
     @Autowired
-    DepartmentRepository departmentRepository;
+    EmployeeService employeeService;
 
     @Autowired
-    EmployeeRepository employeeRepository;
+    UserService userService;
 
     @PostMapping("user")
-    public User createUser(@RequestBody User user) {
-        return userRepository.save(user);
+    public UserDTO createUser(@RequestBody UserDTO userDTO) {
+        return userService.save(userDTO);
     }
 
     @PostMapping("profile")
-    public Profile createProfile(@RequestBody Profile profile) {
-        return profileRepository.save(profile);
+    public ProfileDTO createProfile(@RequestBody ProfileDTO profileDTO) {
+        return profileService.save(profileDTO);
     }
 
     @PostMapping("department")
-    public Department createDepartment(@RequestBody Department department) {
-        return departmentRepository.save(department);
+    public DepartmentDTO createDepartment(@RequestBody DepartmentDTO department) {
+        return departmentService.save(department);
     }
 
     @PostMapping("employeev2")
-    public Employee createEmployee(@RequestBody Employee employee) {
-        return employeeRepository.save(employee);
+    public EmployeeDTO createEmployee(@RequestBody EmployeeDTO employee) {
+        return employeeService.save(employee);
+    }
+
+    @GetMapping("user/{id}")
+    public UserDTO getUserById(@PathVariable("id") Long id) {
+        return userService.getUserById(id);
     }
 }
