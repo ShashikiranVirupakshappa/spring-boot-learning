@@ -9,6 +9,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Primary;
 
 @Configuration
 @EnableCaching
@@ -17,10 +18,10 @@ public class HazelCastCacheConfig {
     @Bean
     public ClientConfig hazelcastClientConfig() {
         ClientConfig clientConfig = new ClientConfig();
-        clientConfig.setInstanceName("my-hazelcast-instance");
+        clientConfig.setInstanceName("my-hazelcast-client");
         clientConfig.setClusterName("spring-boot-learning-cluster");
         ClientNetworkConfig clientNetworkConfig = clientConfig.getNetworkConfig();
-        clientNetworkConfig.addAddress("127.0.0.1:5701", "127.0.0.1:5702", "127.0.0.1:5703", "127.0.0.1:5704", "127.0.0.1:5705");
+        clientNetworkConfig.addAddress("127.0.0.1:5701");
         NearCacheConfig nearCacheConfig = new NearCacheConfig();
         nearCacheConfig.setName("users");
         nearCacheConfig.setTimeToLiveSeconds(300);
@@ -31,7 +32,8 @@ public class HazelCastCacheConfig {
     }
 
     @Bean
-    @DependsOn("hazelcastClientConfig")
+    @Primary
+    @DependsOn("hazelcastServerInstance")
     public HazelcastInstance hazelcastInstance(ClientConfig clientConfig) {
         return HazelcastClient.newHazelcastClient(clientConfig);
     }

@@ -8,8 +8,6 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class UserService {
 
@@ -18,16 +16,14 @@ public class UserService {
 
     @Cacheable(cacheNames = "users", key = "#id")
     public UserDTO getUserById(Long id) {
-        Optional<User> optionalUser = userRepository.findById(id);
+        User userDB = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found for id: " + id));
         UserDTO userDTO = null;
-        if(optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            userDTO = new UserDTO();
-            userDTO.setId(user.getId());
-            userDTO.setUserName(user.getUserName());
-            userDTO.setFirstName(user.getFirstName());
-            userDTO.setLastName(user.getLastName());
-        }
+        userDTO = new UserDTO();
+        userDTO.setId(userDB.getId());
+        userDTO.setUserName(userDB.getUserName());
+        userDTO.setFirstName(userDB.getFirstName());
+        userDTO.setLastName(userDB.getLastName());
+
         return userDTO;
     }
 

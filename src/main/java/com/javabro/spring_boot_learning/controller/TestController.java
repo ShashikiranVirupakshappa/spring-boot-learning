@@ -62,4 +62,9 @@ public class TestController {
     public UserDTO getUserById(@PathVariable("id") Long id) {
         return userService.getUserById(id);
     }
+
+    @GetMapping("department/{departmentCode}")
+    public DepartmentDTO getDepartmentByDepartmentCode(@PathVariable("departmentCode")String departmentCode) {
+        return departmentService.getDepartmentByDepartmentCode(departmentCode);
+    }
 }

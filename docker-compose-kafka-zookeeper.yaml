@@ -13,10 +13,29 @@ services:
       - KAFKA_BROKER_ID=1
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
       - KAFKA_LISTENERS=PLAINTEXT://:9092
-      - KAFKA_ADVERTISED_HOST_NAME=localhost
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
       - ALLOW_PLAINTEXT_LISTENER=yes
     ports:
       - '9092:9092'
     depends_on:   
       - zookeeper
+  spring-boot-learning:
+    image: 'spring-boot-learning:1.0'
+    container_name: spring-boot-learning-container
+    environment:
+      - SPRING_PROFILES_ACTIVE=test
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+    ports:
+      - '8080:8080'
+    depends_on:
+      - kafka
+      - rabbitmq
+  rabbitmq:
+    image: 'rabbitmq:4.1.4-management'
+    container_name: rabbitmq
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+      - '25672:25672'
